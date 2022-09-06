@@ -1,6 +1,8 @@
 if(!localStorage.getItem("detroit_stats")) {
-    localStorage.setItem("detroit_stats", "detroit:1.0;inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5));
+    localStorage.setItem("detroit_stats", "detroit:"+version+";inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5));
 }
+
+var version = "1.0";
 
 var objectStats = {};
 var statString = localStorage.getItem("detroit_stats");
@@ -93,7 +95,7 @@ createActionButton("Debug: Raise money", (button) => {
 
 createActionButton("Debug: Reset", (button) => {
     button.onclick = (event) => {
-        localStorage.setItem("detroit_stats", "detroit:1.0;inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5));
+        localStorage.setItem("detroit_stats", "detroit:"+version+";inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5));
         statString = localStorage.getItem("detroit_stats");
         statString.split(";").forEach(stat => {
             objectStats[stat.split(":")[0]] = stat.split(":")[1]
@@ -106,6 +108,13 @@ createActionButton("Import Save", (button) => {
     button.onclick = function (event) {
         d = prompt("Save Text:")
         d.split(";").forEach(stat => {
+            if(stat.startsWith("detroit")) {
+                ver = stat.split(":")[1];
+                if(ver != version) {
+                    cc = confirm("This save is on version v"+ver+" and you're on v"+version+"!\nImporting this is dangerous and you could lose newer data")
+                    if(!cc == true) return;
+                }
+            }
             if(stat.startsWith("hwid")) {
                 if(objectStats.hwid == stat.split(":")[1]) {
                     localStorage.setItem("detroit_stats", d)
@@ -118,7 +127,11 @@ createActionButton("Import Save", (button) => {
                     alert("Incompatible save.")
                 }
             }
-            })     
+            })    
+        if(objectStats.detroit != version) {
+            objectStats.detroit += " (Dangerous)";
+            updateStats();
+        } 
     }
 })
 
