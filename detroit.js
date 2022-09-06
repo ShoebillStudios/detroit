@@ -4,9 +4,9 @@ if(!localStorage.getItem("detroit_stats")) {
 
 var stats = JSON.parse(localStorage.getItem("detroit_stats"));
 
-if(stats.detroit != 1) {
+if(stats.detroit != 10) {
     stats = {
-        detroit: 1,
+        detroit: 10,
         inventory: [],
         player: {
             name: "Player"+Math.random().toString().substring(2,6)
@@ -18,4 +18,4 @@ if(stats.detroit != 1) {
     }
 }
 
-alert(stats)
+alert(stats.detroit)
