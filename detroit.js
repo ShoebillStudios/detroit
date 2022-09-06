@@ -1,6 +1,8 @@
 var version = "1.0";
 if(!localStorage.getItem("detroit_stats")) {
-    newname = prompt("Welcome to Detroit. What shall we call you?")
+    prompts = ['Welcome to Detroit. What will we call you?', 'This is the beginning of your adventure in Detroit. What shall we call you?', 'Welcome to Detroit. What is your name?']
+    newname = prompt(prompts[Math.floor(Math.random() * prompts.length)])
+    alert("Welcome to Detroit, "+newname+".");
     localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:"+newname+";iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Your Home (Detroit)");
 }
 
@@ -15,11 +17,9 @@ var statsDiv = document.getElementById("stats");
 updateStats();
 function updateStats() {
     statsDiv.innerHTML = `
-<p>Save Version: ${objectStats.detroit}</p>
 <p>Money: ${objectStats.m}</p>
 <p>Inventory: ${objectStats.inv}</p>
 <p>Location: ${objectStats.loc}</p>
-<p>Player Name: ${objectStats.name}</p>
 <p>IQ: ${objectStats.iq}</p>
 <p>Attack: ${objectStats.att}</p>
 <p>Defense: ${objectStats.def}</p>
@@ -44,7 +44,13 @@ function openShop() {
         return;
     }
     gameDiv.innerHTML += `<div id="shop"><h1>Shop</h1></div>`
-    addShopItem({name:"Cool Test Item",cost:50,limit:3})
+    addShopItem({name:"Ticket to Ohio",cost:50,limit:1}, (tem) => {
+        tem.addEventListener("click", () => {
+            alert("You're going to Ohio.")
+            objectStats.loc = "Ohio";
+            updateStats();
+        })
+    })
 }
 
 function addShopItem(item={name:"My Item", cost:5}, callback=(button)=>{}) {
@@ -54,7 +60,6 @@ function addShopItem(item={name:"My Item", cost:5}, callback=(button)=>{}) {
     b.onclick = function (event) {
         buyItemFromShop(item);
     }
-    callback(b);
     return b;
 }
 
@@ -83,8 +88,12 @@ createActionButton("Go to Shop", (button) => {
     })
 })
 
-createActionButton("Debug: Reset", (button) => {
+createActionButton("Reset", (button) => {
     button.onclick = (event) => {
+        cc = confirm("You are about to lose all of your progress in Detroit Adventure.\nAre you sure?")
+        if(!cc == true) return;
+        cb = confirm("This is irreversible without a save code. Last chance to cancel.")
+        if(!cb == true) return;
         localStorage.setItem("detroit_stats", "");
         window.location.reload();
     }
