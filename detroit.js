@@ -1,5 +1,5 @@
 if(!localStorage.getItem("detroit_stats")) {
-    localStorage.setItem("detroit_stats", "detroit:"+version+";inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
+    localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
 }
 
 var version = "1.0";
@@ -23,8 +23,7 @@ function updateStats() {
 <p>IQ: ${objectStats.iq}</p>
 <p>Attack: ${objectStats.att}</p>
 <p>Defense: ${objectStats.def}</p>
-<p>Health: ${objectStats.h}</p>
-<p>Locked to: ${objectStats.hwid}</p>`;
+<p>Health: ${objectStats.h}</p>`;
 c = `detroit:${objectStats.detroit};inv:${objectStats.inv};name:${objectStats.name};iq:${objectStats.iq};att:${objectStats.att};def:${objectStats.def};h:${objectStats.h};m:${objectStats.m};hwid:${objectStats.hwid};loc:${objectStats.loc}`
 localStorage.setItem("detroit_stats", c)
 }
@@ -96,7 +95,7 @@ createActionButton("Debug: Raise money", (button) => {
 
 createActionButton("Debug: Reset", (button) => {
     button.onclick = (event) => {
-        localStorage.setItem("detroit_stats", "detroit:"+version+";inv:;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
+        localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
         statString = localStorage.getItem("detroit_stats");
         statString.split(";").forEach(stat => {
             objectStats[stat.split(":")[0]] = stat.split(":")[1]

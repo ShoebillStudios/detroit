@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+* {
+    font-family: 'Roboto Condensed', sans-serif;
+    color: white;
+}
+
+.t {
+    text-align: center;
+}
+
+body {
+    background-image: url("https://github.com/DetroitAdventure/assets/blob/main/background.png?raw=true");
+    background-size: cover;
+    margin: 0 auto;
+    width: 50%;
+}
+
+button {
+    color: black;
+}
