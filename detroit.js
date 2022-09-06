@@ -3,7 +3,7 @@ if (!localStorage.getItem("detroit_stats")) {
     prompts = ['Welcome to Detroit. What will we call you?', 'This is the beginning of your adventure in Detroit. What shall we call you?', 'Welcome to Detroit. What is your name?'];
     newname = prompt(prompts[Math.floor(Math.random() * prompts.length)]);
     alert("Welcome to Detroit, " + newname + ".");
-    localStorage.setItem("detroit_stats", "detroit:" + version + ";inv:House Key;name:" + newname + ";iq:0;att:0;def:0;h:100;m:0;hwid:" + Math.random().toString().substring(2, 5) + ";loc:Your Home (Detroit)");
+    localStorage.setItem("detroit_stats", "detroit:" + version + ";inv:House Key;name:" + newname + ";iq:0;att:0;def:0;h:100;m:0;hwid:" + Math.random().toString().substring(2, 5) + ";loc:Your Home (Detroit);job:Unemployed");
 }
 
 var objectStats = {};
@@ -17,6 +17,7 @@ var statsDiv = document.getElementById("stats");
 updateStats();
 function updateStats() {
     statsDiv.innerHTML = `
+<p>Job: ${objectStats.job}</p>
 <p>Money: ${objectStats.m}</p>
 <p>Inventory: ${objectStats.inv}</p>
 <p>Location: ${objectStats.loc}</p>
@@ -24,10 +25,13 @@ function updateStats() {
 <p>Attack: ${objectStats.att}</p>
 <p>Defense: ${objectStats.def}</p>
 <p>Health: ${objectStats.h}</p>`;
-    c = `detroit:${objectStats.detroit};inv:${objectStats.inv};name:${objectStats.name};iq:${objectStats.iq};att:${objectStats.att};def:${objectStats.def};h:${objectStats.h};m:${objectStats.m};hwid:${objectStats.hwid};loc:${objectStats.loc}`;
+    c = `detroit:${objectStats.detroit};inv:${objectStats.inv};name:${objectStats.name};iq:${objectStats.iq};att:${objectStats.att};def:${objectStats.def};h:${objectStats.h};m:${objectStats.m};hwid:${objectStats.hwid};loc:${objectStats.loc};job:${objectStats.job}`;
     localStorage.setItem("detroit_stats", c);
 }
 function createActionButton(action, callback) {
+    if(document.getElementById("action:"+action)) {
+        document.getElementById("action:"+action).remove();
+    }
     a = document.createElement("button");
     a.appendChild(document.createTextNode(action));
     a.id = "action:" + action;
@@ -46,11 +50,29 @@ function openShop() {
     gameDiv.innerHTML += `<div id="shop"><h1>Shop</h1></div>`;
     addShopItem({ name: "Ticket to Ohio", cost: 50, limit: 1 }, function (tem) {
         tem.addEventListener("click", function () {
-            alert("You're going to Ohio.");
+            if(objectStats.m >= item.cost) {
+                alert("You're going to Ohio.");
             objectStats.loc = "Ohio";
             updateStats();
+            }
         });
     });
+    if (objectStats.job == "Unemployed") {
+        addShopItem({name: "Job at FloorStore", cost: 0, limit: 1}, function (tem) {
+            tem.addEventListener("click", function () {
+                alert("You've got the job at FloorStore.");
+                objectStats.job = "FloorStore";
+                updateStats();
+                createActionButton("Work", function (button) {
+                    button.onclick = function (event) {
+                        alert("wrokign");
+                    };
+                });
+            });
+        });
+    } else {
+        return;
+    }
 }
 
 function addShopItem(item = { name: "My Item", cost: 5 }, callback = function (button) { }) {
@@ -59,7 +81,9 @@ function addShopItem(item = { name: "My Item", cost: 5 }, callback = function (b
     document.getElementById("shop").appendChild(b);
     b.onclick = function (event) {
         buyItemFromShop(item);
+        b.remove();
     };
+    callback(b);
     return b;
 }
 
@@ -135,3 +159,10 @@ createActionButton("Export Save", function (button) {
         alert(localStorage.getItem("detroit_stats"));
     };
 });
+if(objectStats.job == "FloorStore") {
+    createActionButton("Work", function (button) {
+        button.onclick = function (event) {
+            alert("wrokign");
+        };
+    });
+}
