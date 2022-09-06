@@ -1,8 +1,8 @@
-if(!localStorage.getItem("detroit_stats")) {
-    localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
-}
-
 var version = "1.0";
+if(!localStorage.getItem("detroit_stats")) {
+    newname = prompt("Welcome to Detroit. What shall we call you?")
+    localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:"+newname+";iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Your Home (Detroit)");
+}
 
 var objectStats = {};
 var statString = localStorage.getItem("detroit_stats");
@@ -36,16 +36,11 @@ function createActionButton(action, callback) {
     return a;
 }
 
-createActionButton("Debug: Raise IQ", (button) => {
-    button.addEventListener("click", (event) => {
-        objectStats.iq ++;
-        updateStats();
-    })
-})
-
 function openShop() {
     if(document.getElementById("shop")) {
         document.getElementById("shop").remove();
+        objectStats.loc = "Your Home (Detroit)"
+        updateStats();
         return;
     }
     gameDiv.innerHTML += `<div id="shop"><h1>Shop</h1></div>`
@@ -80,27 +75,18 @@ function buyItemFromShop(item) {
     }
 }
 
-createActionButton("Debug: Toggle Shop", (button) => {
+createActionButton("Go to Shop", (button) => {
     button.addEventListener("click", (event) => {
+        objectStats.loc = "Shop (Detroit)"
         openShop();
-    })
-})
-
-createActionButton("Debug: Raise money", (button) => {
-    button.onclick = (event) => {
-        objectStats.m = 15000;
         updateStats();
-    }
+    })
 })
 
 createActionButton("Debug: Reset", (button) => {
     button.onclick = (event) => {
-        localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:PlayerName;iq:0;att:0;def:0;h:100;m:0;hwid:"+Math.random().toString().substring(2,5)+";loc:Detroit");
-        statString = localStorage.getItem("detroit_stats");
-        statString.split(";").forEach(stat => {
-            objectStats[stat.split(":")[0]] = stat.split(":")[1]
-            })        
-        updateStats(); 
+        localStorage.setItem("detroit_stats", "");
+        window.location.reload();
     }
 })
 
