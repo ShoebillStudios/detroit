@@ -18,4 +18,4 @@ if(stats.detroit != 10) {
     }
 }
 
-alert(stats.detroit)
+localStorage.setItem("detroit_stats", JSON.parse(stats));
