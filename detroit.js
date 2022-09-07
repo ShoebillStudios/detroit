@@ -7,9 +7,7 @@ if(!localStorage.getItem("detroit_stats")) {
     localStorage.setItem("detroit_stats", "detroit:"+version+";inv:House Key;name:"+newname+";iq:0;att:0;def:0;h:100;m:20;hwid:"+Math.random().toString().substring(2,5)+";loc:Your Home (Detroit);job:None;at:Detroit");
 }
 
-var chances = {
-    r: 25
-}
+var passive = 0;
 
 var objectStats = {};
 var statString = localStorage.getItem("detroit_stats");
@@ -26,7 +24,7 @@ updateStats();
 function updateStats() {
     statsDiv.innerHTML = `
 <p>Job: ${objectStats.job}</p>
-<p>Money: ${objectStats.m}</p>
+<p>Money: D\$${objectStats.m}</p>
 <p>Location: ${objectStats.loc}</p>
 <p>IQ: ${objectStats.iq}</p>
 <p>Attack: ${objectStats.att}</p>
@@ -144,34 +142,7 @@ createActionButton("View Inventory", (button) => {
     alert("Your Inventory\n\n"+ivl.join("\n"))
     }
 })
-objectStats.inv.split(",").forEach(invItem => {
-    if(invItem == "Ticket to Ohio") {
-        if(objectStats.at == "Detroit") {
-        createActionButton("Go to Ohio", (bev) => {
-            bev.onclick = (ev) => {
-                alert("You're going to Ohio.")
-                objectStats.loc = "Ohio";
-                objectStats.at = "Ohio";
-                updateStats();
-                window.location.reload();
-            }
-        })
-    }
-    }
-    if(invItem == "Ticket back to Detroit") {
-        if(objectStats.at == "Ohio") {
-            createActionButton("Go to Detroit", (bev) => {
-                bev.onclick = (ev) => {
-                    alert("You're going to Detroit.")
-                    objectStats.loc = "Detroit";
-                    objectStats.at = "Detroit";
-                    updateStats();
-                    window.location.reload();
-                }
-            })
-        }
-    }
-})
+inventorySort();
 if(objectStats.m <= 20) {
     createActionButton("Look for old money", (button) => {
         button.onclick = function (ev) {
@@ -245,13 +216,19 @@ if(objectStats.at == "Ohio") {
 
 setInterval(function () {
     if(objectStats.job != "None") {
-        objectStats.m = +objectStats.m+4;
-        updateStats();
+        passive = 4;
     }
     if(objectStats.job == "OK Games") {
-        objectStats.m = +objectStats.m+12;
-        updateStats();
+        passive = 12;
     }
+    if(objectStats.job == "Six Above") {
+        passive = 20
+    }
+    if(objectStats.job == "CEO OF DETROIT!!!") {
+        passive = 120;
+    }
+    objectStats.m = +objectStats.m+passive;
+        updateStats();
 },2500)
 
 function chance(chanceType) {
@@ -264,7 +241,60 @@ function chance(chanceType) {
 if(objectStats.job != "None") {
     newJob(objectStats.job)
 }
-
+function inventorySort() {
+    objectStats.inv.split(",").forEach(invItem => {
+        if(invItem == "Ticket to Ohio") {
+            if(objectStats.at == "Detroit") {
+            createActionButton("Go to Ohio", (bev) => {
+                bev.onclick = (ev) => {
+                    alert("You're going to Ohio.")
+                    objectStats.loc = "Ohio";
+                    objectStats.at = "Ohio";
+                    updateStats();
+                    window.location.reload();
+                }
+            })
+        }
+        }
+        if(invItem == "Ticket back to Detroit") {
+            if(objectStats.at == "Ohio") {
+                createActionButton("Go to Detroit", (bev) => {
+                    bev.onclick = (ev) => {
+                        alert("You're going to Detroit.")
+                        objectStats.loc = "Detroit";
+                        objectStats.at = "Detroit";
+                        updateStats();
+                        window.location.reload();
+                    }
+                })
+            }
+        }
+        if(invItem == "Living in Ohio 101") {
+            createActionButton("Read Living in Ohio 101", (bev) => {
+                bev.onclick = (ev) => {
+                    alert("Living in Ohio 101\nby Ohio Main")
+                    alert("Step 1: live")
+                    objectStats.iq = +objectStats.iq+2;
+                    updateStats();
+                    if(objectStats.iq >= 50) {
+                        objectStats.inv += ",IQ Orb";
+                        inventorySort();
+                    }
+                }
+            })
+        }
+        if(invItem == "IQ Orb") {
+            createActionButton("Stare at IQ Orb", (bev) => {
+                bev.onclick = (event) => {
+                    alert("You stared at the IQ Orb.")
+                    alert("It generated Money.")
+                    objectStats.m = +objectStats.m+50
+                    updateStats();
+                }
+            })
+        }
+    })
+}
 
 
 versionElement = document.createElement("p")
