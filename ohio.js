@@ -28,7 +28,7 @@ function OhioShop() {
         window.location.reload();
     })
     addShopItem({name:"The Orb",cost:15000,limit:1} , (event) => {
-
+        
     })
     addShopItem({name:"Living in Ohio 101", cost:10,limit:1}, (event) => {
         alert("Read this book to gain IQ.")

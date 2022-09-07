@@ -339,6 +339,13 @@ function inventorySort() {
                 }
             })
         }
+        if(invItem == "The Orb") {
+            createActionButton("Orb", (bev) => {
+                bev.onclick = (event) => {
+                    
+                }
+            })
+        }
     })
 }
 
