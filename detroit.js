@@ -23,9 +23,7 @@ var statsDiv = document.getElementById("stats");
 updateStats();
 function updateStats() {
     statsDiv.innerHTML = `
-<p>Job: ${objectStats.job}</p>
 <p>Money: D\$${objectStats.m}</p>
-<p>Location: ${objectStats.loc}</p>
 <p>IQ: ${objectStats.iq}</p>
 <p>Attack: ${objectStats.att}</p>
 <p>Defense: ${objectStats.def}</p>
@@ -283,10 +281,58 @@ function inventorySort() {
                 }
             })
         }
+        if(invItem == "Crewmate Handbook") {
+            createActionButton("Read Crewmate Handbook", (bev) => {
+                bev.onclick = (ev) => {
+                    alert("Crewmate Handbook\nby Ohio Main")
+                    alert("Step 1: JUST BE CREW MATE!!!!")
+                    objectStats.def = +objectStats.def+2;
+                    updateStats();
+                    if(objectStats.def >= 50) {
+                        objectStats.inv += ",Defense Orb";
+                        inventorySort();
+                    }
+                }
+            })
+        }
+        if(invItem == "The Full Guide to Among Us") {
+            createActionButton("Read Among Us Guide", (bev) => {
+                bev.onclick = (ev) => {
+                    alert("The Full Guide to Among Us\nby Ohio Main")
+                    alert("Step 1: amog")
+                    objectStats.att = +objectStats.att+2;
+                    updateStats();
+                    if(objectStats.att >= 50) {
+                        objectStats.inv += ",Attack Orb";
+                        inventorySort();
+                    }
+                }
+            })
+        }
         if(invItem == "IQ Orb") {
             createActionButton("Stare at IQ Orb", (bev) => {
                 bev.onclick = (event) => {
                     alert("You stared at the IQ Orb.")
+                    alert("It generated Money.")
+                    objectStats.m = +objectStats.m+50
+                    updateStats();
+                }
+            })
+        }
+        if(invItem == "Attack Orb") {
+            createActionButton("Stare at Attack Orb", (bev) => {
+                bev.onclick = (event) => {
+                    alert("You stared at the Attack Orb.")
+                    alert("It generated Money.")
+                    objectStats.m = +objectStats.m+50
+                    updateStats();
+                }
+            })
+        }
+        if(invItem == "Defense Orb") {
+            createActionButton("Stare at Defense Orb", (bev) => {
+                bev.onclick = (event) => {
+                    alert("You stared at the Defense Orb.")
                     alert("It generated Money.")
                     objectStats.m = +objectStats.m+50
                     updateStats();
