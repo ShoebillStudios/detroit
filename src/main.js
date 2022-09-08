@@ -5,4 +5,23 @@ if(saveString.includes(';')) {
     confirmMove = confirm("Move Legacy save to 1.2?\n\nCancel: No\nOK: Yes");
     if(!confirmMove) return;
     alert("moving save")
+    legacy = saveString.split(';');
+    legacyStats = {};
+    modernStats = {};
+    legacy.forEach(key => {
+        legacyStats[key.split(":")[0]] = key.split(":")[1];
+    })
+    modernStats.attrib = {};
+    modernStats.attrib.iq = legacyStats.iq;
+    modernStats.attrib.def = legacyStats.def;
+    modernStats.attrib.att = legacyStats.att;
+    modernStats.attrib.health = legacyStats.h;
+    modernStats.player = {};
+    modernStats.player.name = legacyStats.name;
+    modernStats.player.hwid = legacyStats.hwid;
+    modernStats.player.location = legacyStats.at;
+    modernStats.player.job = legacyStats.job;
+    modernStats.display = {};
+    modernStats.display.location = legacyStats.loc;
+    alert(modernStats);
 }
