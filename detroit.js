@@ -1,13 +1,13 @@
 var version = "1.0";
+var welcome = true;
 if (!localStorage.getItem("detroit_stats")) {
     prompts = ['Welcome to Detroit. What will we call you?', 'This is the beginning of your adventure in Detroit. What shall we call you?', 'Welcome to Detroit. What is your name?'];
     newname = prompt(prompts[Math.floor(Math.random() * prompts.length)]);
     alert("Welcome to Detroit, " + newname + ".");
-    localStorage.setItem("detroit_stats", "detroit:" + version + ";inv:House Key;name:" + newname + ";iq:0;att:0;def:0;h:100;m:0;hwid:" + Math.random().toString().substring(2, 5) + ";loc:Your Home (Detroit);job:Unemployed");
+    localStorage.setItem("detroit_stats", "detroit:" + version + ";inv:House Key;name:" + newname + ";iq:0;att:0;def:0;h:100;m:0;hwid:" + Math.random().toString().substring(2, 5) + ";loc:Your Home (Detroit);job:Unemployed;at:Detroit");
+    welcome = false;
 }
-
 var passive = 0;
-
 var objectStats = {};
 var statString = localStorage.getItem("detroit_stats");
 statString.split(";").forEach(stat => {
@@ -15,6 +15,9 @@ objectStats[stat.split(":")[0]] = stat.split(":")[1]
 })
 if(objectStats.detroit != version) {
     alert("Your save is from an older version. Updating your save")
+}
+if(welcome == true) {
+    alert("Welcome back, "+objectStats.name)
 }
 
 var gameDiv = document.getElementById("game");
@@ -208,6 +211,9 @@ createActionButton("Export Save", (button) => {
 if(objectStats.at == "Ohio") {
     OhioStart();
 }
+if(objectStats.at == "TheOrb_storyline") {
+    OrbStart();
+}
 
 // Job Logic
 
@@ -339,9 +345,12 @@ function inventorySort() {
             })
         }
         if(invItem == "The Orb") {
-            createActionButton("Orb", (bev) => {
+            createActionButton("The Orb", (bev) => {
                 bev.onclick = (event) => {
-                    
+                    cc = confirm("Are you sure you want to speak to the orb?");
+                    if(!cc) return;
+                    localStorage.setItem("detroit_stats", "detroit:" + version + ";inv:House Key,The Orb;name:The Orb is here...;iq:01001111;att:01010010;def:01000010;h:100;m:9999;hwid:" + Math.random().toString().substring(2, 5) + ";loc:ORB;job:ORB;at:TheOrb_storyline");
+                    window.location.reload();
                 }
             })
         }
