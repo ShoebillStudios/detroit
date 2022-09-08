@@ -136,6 +136,11 @@ createActionButton("Export Save", (button) => {
     alert(localStorage.getItem("detroit_stats"));
   };
 });
+createActionButton("Debug Menu", (button) => {
+    button.onclick = function () {
+        window.location.href = "locations/debug.html"
+    }
+})
 if (objectStats.at == "Ohio") {
   OhioStart();
 }
@@ -284,11 +289,7 @@ function inventorySort() {
     }
   });
 }
-createActionButton("Debug Menu", (button) => {
-    button.onclick = () => {
-        window.location.href = "locations/debug.html"
-    }
-})
+
 
 versionElement = document.createElement("p");
 versionElement.appendChild(
