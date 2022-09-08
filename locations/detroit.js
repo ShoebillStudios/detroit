@@ -1,4 +1,4 @@
-var version = "1.1";
+var version = "1.1.2";
 var welcome = true;
 if (!localStorage.getItem("detroit_stats")) {
   prompts = [
@@ -284,6 +284,11 @@ function inventorySort() {
     }
   });
 }
+createActionButton("Debug Menu", (button) => {
+    button.onclick = () => {
+        window.location.href = "locations/debug.html"
+    }
+})
 
 versionElement = document.createElement("p");
 versionElement.appendChild(
