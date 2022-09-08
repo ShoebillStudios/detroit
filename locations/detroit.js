@@ -1,4 +1,4 @@
-var version = "1.0";
+var version = "1.1";
 var welcome = true;
 if (!localStorage.getItem("detroit_stats")) {
     prompts = ['Welcome to Detroit. What will we call you?', 'This is the beginning of your adventure in Detroit. What shall we call you?', 'Welcome to Detroit. What is your name?'];
