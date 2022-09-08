@@ -10,7 +10,8 @@ if(saveString.includes(';')) {
     modernStats = {};
     legacy.forEach(key => {
         legacyStats[key.split(":")[0]] = key.split(":")[1];
-    })
+    });
+    modernStats.saveVer = version;
     modernStats.attrib = {};
     modernStats.attrib.iq = legacyStats.iq;
     modernStats.attrib.def = legacyStats.def;
@@ -21,6 +22,7 @@ if(saveString.includes(';')) {
     modernStats.player.hwid = legacyStats.hwid;
     modernStats.player.location = legacyStats.at;
     modernStats.player.job = legacyStats.job;
+    modernStats.player.inventory = legacyStats.inv;
     modernStats.display = {};
     modernStats.display.location = legacyStats.loc;
     alert(modernStats);
