@@ -15,6 +15,8 @@ objectStats[stat.split(":")[0]] = stat.split(":")[1]
 })
 if(objectStats.detroit != version) {
     alert("Your save is from an older version. Updating your save")
+    objectStats.detroit = version;
+    updateStats();
 }
 if(welcome == true) {
     alert("Welcome back, "+objectStats.name)
