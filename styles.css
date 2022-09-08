@@ -10,7 +10,8 @@
 }
 
 body {
-    background-image: url("https://github.com/DetroitAdventure/assets/blob/main/background.png");
+    background-color: black;
+    background-image: url("https://github.com/DetroitAdventure/assets/blob/main/background.png?raw=true");
     background-size: cover;
     margin: 0 auto;
     width: 50%;
