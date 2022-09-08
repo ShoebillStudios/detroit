@@ -1,10 +1,11 @@
-<button onclick="alert(localStorage.getItem('detroit_stats'))">Unchanged save</button>
-<button onclick="alert(objectStats.hwid)">View HWID</button>
-<button onclick="alert(JSON.stringify(objectStats))">View JSON stats</button>
-
 <script>
+    var objectStats = {};
     var statString = localStorage.getItem("detroit_stats");
     statString.split(";").forEach((stat) => {
         objectStats[stat.split(":")[0]] = stat.split(":")[1];
     });
 </script>
+<button onclick="alert(localStorage.getItem('detroit_stats'))">Unchanged save</button>
+<button onclick="alert(objectStats.hwid)">View HWID</button>
+<button onclick="alert(JSON.stringify(objectStats))">View JSON stats</button>
+
