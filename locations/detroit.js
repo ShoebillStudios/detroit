@@ -77,6 +77,7 @@ createActionButton("Reset", (button) => {
 
 createActionButton("Import Save", (button) => {
     button.onclick = function (event) {
+        wentThroughVerify = 0;
         d = prompt("Save Text:")
         d.split(";").forEach(stat => {
             if(stat.startsWith("detroit")) {
@@ -87,7 +88,12 @@ createActionButton("Import Save", (button) => {
                 }
             }
             if(stat.startsWith("hwid")) {
+                wentThroughVerify = 1;
                 if(objectStats.hwid == stat.split(":")[1]) {
+                    if(objectStats.detroit != version) {
+                        objectStats.detroit += " (Dangerous)";
+                        updateStats();
+                    } 
                     localStorage.setItem("detroit_stats", d)
                     statString = localStorage.getItem("detroit_stats");
         statString.split(";").forEach(stat => {
@@ -95,14 +101,13 @@ createActionButton("Import Save", (button) => {
             })     
                     updateStats();
                 } else {
-                    alert("Incompatible save.")
+                    alert("Save is from another device, halting..")
                 }
             }
             })    
-        if(objectStats.detroit != version) {
-            objectStats.detroit += " (Dangerous)";
-            updateStats();
-        } 
+        if(wentThroughVerify == 0) {
+            alert("Nothing to import, or no verification to check")
+        }
     }
 })
 
