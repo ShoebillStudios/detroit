@@ -1,5 +1,12 @@
 var version = "1.1.2";
 var welcome = true;
+var defaultSave = btoa("detroit:" +
+version +
+";inv:House Key;name:" +
+newname +
+";iq:0;att:0;def:0;h:100;m:0;hwid:" +
+Math.random().toString().substring(2, 5) +
+";loc:Your Home (Detroit);job:Unemployed;at:Detroit");
 if (!localStorage.getItem("detroit_stats")) {
   prompts = [
     "Welcome to Detroit. What will we call you?",
@@ -10,19 +17,19 @@ if (!localStorage.getItem("detroit_stats")) {
   alert("Welcome to Detroit, " + newname + ".");
   localStorage.setItem(
     "detroit_stats",
-    "detroit:" +
-      version +
-      ";inv:House Key;name:" +
-      newname +
-      ";iq:0;att:0;def:0;h:100;m:0;hwid:" +
-      Math.random().toString().substring(2, 5) +
-      ";loc:Your Home (Detroit);job:Unemployed;at:Detroit"
+    defaultSave
   );
   welcome = false;
 }
+
+if(localStorage.getItem("detroit_stats").includes("detroit:")) {
+  alert("Save is old. Updating!")
+  localStorage.setItem("detroit_stats", btoa(localStorage.getItem("detroit_stats")))
+  alert("Updated save.")
+}
 var passive = 0;
 var objectStats = {};
-var statString = localStorage.getItem("detroit_stats");
+var statString = atob(localStorage.getItem("detroit_stats"));
 statString.split(";").forEach((stat) => {
   objectStats[stat.split(":")[0]] = stat.split(":")[1];
 });
@@ -233,7 +240,7 @@ createActionButton("Import Save", (button) => {
             updateStats();
           }
           localStorage.setItem("detroit_stats", d);
-          statString = localStorage.getItem("detroit_stats");
+          statString = atob(localStorage.getItem("detroit_stats"));
           statString.split(";").forEach((stat) => {});
           updateStats();
         } else {
@@ -249,7 +256,7 @@ createActionButton("Import Save", (button) => {
 
 createActionButton("Export Save", (button) => {
   button.onclick = function (event) {
-    alert(localStorage.getItem("detroit_stats"));
+    alert(atob(localStorage.getItem("detroit_stats")));
   };
 });
 createActionButton("Debug Menu", (button) => {
