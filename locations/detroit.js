@@ -40,7 +40,7 @@ function updateStats() {
   <p>Attack: ${objectStats.att}</p>
   <p>Defense: ${objectStats.def}</p>
   <p>Health: ${objectStats.h}</p>`;
-  c = `detroit:${objectStats.detroit};inv:${objectStats.inv};name:${objectStats.name};iq:${objectStats.iq};att:${objectStats.att};def:${objectStats.def};h:${objectStats.h};m:${objectStats.m};hwid:${objectStats.hwid};loc:${objectStats.loc};job:${objectStats.job};at:${objectStats.at}`;
+  c = btoa(`detroit:${objectStats.detroit};inv:${objectStats.inv};name:${objectStats.name};iq:${objectStats.iq};att:${objectStats.att};def:${objectStats.def};h:${objectStats.h};m:${objectStats.m};hwid:${objectStats.hwid};loc:${objectStats.loc};job:${objectStats.job};at:${objectStats.at}`);
   localStorage.setItem("detroit_stats", c);
 }
 function createActionButton(action, callback) {

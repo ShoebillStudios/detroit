@@ -1,6 +1,6 @@
 <script>
     var objectStats = {};
-    var statString = localStorage.getItem("detroit_stats");
+    var statString = atob(localStorage.getItem("detroit_stats"));
     statString.split(";").forEach((stat) => {
         objectStats[stat.split(":")[0]] = stat.split(":")[1];
     });
