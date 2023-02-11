@@ -1,5 +1,6 @@
 var version = "1.1.2";
-var welcome = true;
+var welcome = true; 
+var newname = prompt(prompts[Math.floor(Math.random() * prompts.length)]);
 var defaultSave = btoa("detroit:" +
 version +
 ";inv:House Key;name:" +
@@ -13,7 +14,6 @@ if (!localStorage.getItem("detroit_stats")) {
     "This is the beginning of your adventure in Detroit. What shall we call you?",
     "Welcome to Detroit. What is your name?",
   ];
-  newname = prompt(prompts[Math.floor(Math.random() * prompts.length)]);
   alert("Welcome to Detroit, " + newname + ".");
   localStorage.setItem(
     "detroit_stats",
