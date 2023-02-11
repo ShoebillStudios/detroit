@@ -1,5 +1,11 @@
 var version = "1.1.2";
 var welcome = true; 
+if (!localStorage.getItem("detroit_stats")) {
+  var prompts = [
+    "Welcome to Detroit. What will we call you?",
+    "This is the beginning of your adventure in Detroit. What shall we call you?",
+    "Welcome to Detroit. What is your name?",
+  ];
 var newname = prompt(prompts[Math.floor(Math.random() * prompts.length)]);
 var defaultSave = btoa("detroit:" +
 version +
@@ -8,12 +14,6 @@ newname +
 ";iq:0;att:0;def:0;h:100;m:0;hwid:" +
 Math.random().toString().substring(2, 5) +
 ";loc:Your Home (Detroit);job:Unemployed;at:Detroit");
-if (!localStorage.getItem("detroit_stats")) {
-  prompts = [
-    "Welcome to Detroit. What will we call you?",
-    "This is the beginning of your adventure in Detroit. What shall we call you?",
-    "Welcome to Detroit. What is your name?",
-  ];
   alert("Welcome to Detroit, " + newname + ".");
   localStorage.setItem(
     "detroit_stats",
@@ -149,18 +149,13 @@ function chance(chanceType) {
   }
 }
 
-if (objectStats.detroit != version) {
-  alert("Your save is from an older version. Updating your save");
-  objectStats.detroit = version;
-  updateStats();
-}
-if (welcome == true) {
-  alert("Welcome back, " + objectStats.name);
-}
+
 
 var gameDiv = document.getElementById("game");
 var statsDiv = document.getElementById("stats");
-updateStats();
+document.body.onload = () => {
+  updateStats();
+}
 
 // Actions at the bottom of the screen
 
@@ -218,9 +213,12 @@ createActionButton("Import Save", (button) => {
   button.onclick = function (event) {
     wentThroughVerify = 0;
     d = prompt("Save Text:");
+    console.log('Got save data')
     d.split(";").forEach((stat) => {
       if (stat.startsWith("detroit")) {
+        console.log('Version check')
         ver = stat.split(":")[1];
+        console.log('Save is on '+ver+', we\'re on '+version)
         if (ver != version) {
           cc = confirm(
             "This save is on version v" +
@@ -234,17 +232,36 @@ createActionButton("Import Save", (button) => {
       }
       if (stat.startsWith("hwid")) {
         wentThroughVerify = 1;
+        console.log('HWID check starting')
         if (objectStats.hwid == stat.split(":")[1]) {
+          console.log('HWID matches so continue')
           if (objectStats.detroit != version) {
+            console.log('Version doesnt match, it could be dangerous save.')
             objectStats.detroit += " (Dangerous)";
             updateStats();
           }
+          console.log('Setting save..')
           localStorage.setItem("detroit_stats", d);
-          statString = atob(localStorage.getItem("detroit_stats"));
-          statString.split(";").forEach((stat) => {});
+          statString = d;
+          statString.split(";").forEach((stat) => {
+            let a = stat.split(":")[0]
+            let b = stat.split(":")[1]
+            objectStats[a] = b;
+          });
           updateStats();
+          window.location.reload()
         } else {
-          alert("Save is from another device, halting..");
+          alert("Save is from another device, be warned!");
+          console.log('Setting save..')
+          localStorage.setItem("detroit_stats", d);
+          statString = d;
+          statString.split(";").forEach((stat) => {
+            let a = stat.split(":")[0]
+            let b = stat.split(":")[1]
+            objectStats[a] = b;
+          });
+          updateStats();
+          window.location.reload()
         }
       }
     });
@@ -290,9 +307,6 @@ setInterval(function () {
   updateStats();
 }, 2500);
 
-if (objectStats.job != "None") {
-  newJob(objectStats.job);
-}
 function inventorySort() {
   objectStats.inv.split(",").forEach((invItem) => {
     if (invItem == "Ticket to Ohio") {
@@ -401,10 +415,10 @@ function inventorySort() {
           localStorage.setItem(
             "detroit_stats",
             "detroit:" +
-              version +
-              ";inv:House Key,The Orb;name:The Orb is here...;iq:01001111;att:01010010;def:01000010;h:100;m:9999;hwid:" +
-              Math.random().toString().substring(2, 5) +
-              ";loc:ORB;job:ORB;at:TheOrb_storyline"
+              btoa(version +
+                ";inv:House Key,The Orb;name:The Orb is here...;iq:01001111;att:01010010;def:01000010;h:100;m:9999;hwid:" +
+                objectStats.hwid +
+                ";loc:ORB;job:ORB;at:TheOrb_storyline")
           );
           window.location.reload();
         };
@@ -415,8 +429,70 @@ function inventorySort() {
 
 versionElement = document.createElement("p");
 versionElement.appendChild(
-  document.createTextNode("Detroit Adventure v" + version)
+  document.createTextNode("Detroit Adventure v" + objectStats.detroit)
 );
 document.body.appendChild(versionElement);
 
 // Functions
+var DETROIT = {
+  GET_SAVE: function () {
+    return atob(localStorage.getItem('detroit_stats'))
+  },
+  IMPORT_SAVE: function (d) {
+    wentThroughVerify = 0;
+    console.log('Got save data')
+    d.split(";").forEach((stat) => {
+      if (stat.startsWith("detroit")) {
+        console.log('Version check')
+        ver = stat.split(":")[1];
+        console.log('Save is on '+ver+', we\'re on '+version)
+        if (ver != version) {
+          cc = confirm(
+            "This save is on version v" +
+              ver +
+              " and you're on v" +
+              version +
+              "!\nImporting this is dangerous and you could lose newer data"
+          );
+          if (!cc == true) return;
+        }
+      }
+      if (stat.startsWith("hwid")) {
+        wentThroughVerify = 1;
+        console.log('HWID check starting')
+        if (objectStats.hwid == stat.split(":")[1]) {
+          console.log('HWID matches so continue')
+          if (objectStats.detroit != version) {
+            console.log('Version doesnt match, it could be dangerous save.')
+            objectStats.detroit += " (Dangerous)";
+          }
+          console.log('Setting save..')
+          localStorage.setItem("detroit_stats", btoa(d));
+          statString = d;
+          statString.split(";").forEach((stat) => {
+            let a = stat.split(":")[0]
+            let b = stat.split(":")[1]
+            objectStats[a] = b;
+          });
+          updateStats();
+          window.location.reload()
+        } else {
+          alert("Save is from another device, be warned!");
+          console.log('Setting save..')
+          localStorage.setItem("detroit_stats", d);
+          statString = d;
+          statString.split(";").forEach((stat) => {
+            let a = stat.split(":")[0]
+            let b = stat.split(":")[1]
+            objectStats[a] = b;
+          });
+          updateStats();
+          window.location.reload()
+        }
+      }
+    });
+    if (wentThroughVerify == 0) {
+      alert("Nothing to import, or no verification to check");
+    }
+  }
+}
